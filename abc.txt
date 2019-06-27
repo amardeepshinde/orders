@@ -1,0 +1,147 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BOL;
+using System.Data.SqlClient;
+namespace DAL
+{
+    public class EmployeeeDAL
+    {
+        public static bool insert(Employee e)
+        {
+            bool status = false;
+            SqlConnection con = new SqlConnection();
+            SqlCommand cmd = new SqlCommand();
+            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\Dotnet\MVCApp\MVCApp\App_Data\ContentDB.mdf;Integrated Security=True";
+            cmd.CommandText = "insert into Employee(name,designation,salary) values(@name,@designation,@salary)";
+
+            // cmd.Parameters.Add(new SqlParameter("@id",e.id));
+            cmd.Parameters.Add(new SqlParameter("@name", e.name));
+            cmd.Parameters.Add(new SqlParameter("@designation", e.designation));
+            cmd.Parameters.Add(new SqlParameter("@salary", e.salary));
+            cmd.Connection = con;
+            try
+            {
+                con.Open();
+                int a = cmd.ExecuteNonQuery();
+                if (a > 1)
+                {
+                    status = true;
+                }
+
+            } catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return status;
+        }
+
+
+        public static bool update(Employee e)
+        {
+            bool status = false;
+            SqlConnection con = new SqlConnection();
+            SqlCommand cmd = new SqlCommand();
+            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\Dotnet\MVCApp\MVCApp\App_Data\ContentDB.mdf;Integrated Security=True";
+            cmd.CommandText = "update Employee set designation=@designation,salary=@salary where id=@id";
+
+            cmd.Parameters.Add(new SqlParameter("@id", e.id));
+            // cmd.Parameters.Add(new SqlParameter("@name", e.name));
+            cmd.Parameters.Add(new SqlParameter("@designation", e.designation));
+            cmd.Parameters.Add(new SqlParameter("@salary", e.salary));
+            cmd.Connection = con;
+            try
+            {
+                con.Open();
+                int a = cmd.ExecuteNonQuery();
+                if (a > 0)
+                {
+                    status = true;
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return status;
+        }
+
+        public static bool delete(int id)
+        {
+            bool status = false;
+            SqlConnection con = new SqlConnection();
+            SqlCommand cmd = new SqlCommand();
+            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\Dotnet\MVCApp\MVCApp\App_Data\ContentDB.mdf;Integrated Security=True";
+            cmd.CommandText = "delete from Employee where id=@id";
+            cmd.Parameters.Add(new SqlParameter("@id", id));
+            cmd.Connection = con;
+            try
+            {
+                con.Open();
+                int abc = cmd.ExecuteNonQuery();
+                if (abc > 0)
+                {
+                    status = true;
+                }
+            } catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return status;
+        }
+
+        public static List<Employee> display(Employee e)
+            {
+            List<Employee> emp = new List<Employee>();
+            SqlConnection con = new SqlConnection();
+            SqlCommand cmd = new SqlCommand();
+            con.ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\Dotnet\MVCApp\MVCApp\App_Data\ContentDB.mdf;Integrated Security=True";
+            cmd.CommandText = "select * from Employee";
+            cmd.Connection = con;
+            try
+            { 
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while(reader.Read())
+                {
+                     int iid = int.Parse(reader["id"].ToString());
+                     string nname = reader["name"].ToString();
+                    string ddesignation = reader["designation"].ToString();
+                    int ssalary = int.Parse(reader["salary"].ToString());
+                    emp.Add(new Employee()
+                    {
+                        id = iid,
+                        name = nname,
+                        designation = ddesignation,
+                        salary = ssalary
+                    });
+                }
+
+            }catch(SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+            return emp;
+            }
+
+    }
+}
