@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DAL;
+using BOL;
+namespace BLL
+{
+    public static class EmployeeManager
+    {
+        public static bool insert(Employee e)
+
+        {
+            return EmployeeeDAL.insert(e);
+        }
+        public static  bool update(Employee e)
+        {
+            return EmployeeeDAL.update(e);
+        }
+        public static bool delete(int id)
+        {
+            return EmployeeeDAL.delete(id);
+        }
+        public static List<Employee> display(Employee e)
+        {
+            return EmployeeeDAL.display(e);
+        }
+    }
+}
