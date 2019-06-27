@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using BOL;
+using BLL;
+namespace MVCApp.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        // GET: Employee
+        public ActionResult Index()
+        {
+            return View();
+        }
+        public ActionResult insert()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult insert(Employee e, string returnUrl)
+        {
+            if (EmployeeManager.insert(e))
+            {
+                return Redirect(returnUrl ?? Url.Action("display", "Employee"));
+            }
+            else
+            {
+
+                return View();
+            }
+        }
+
+        public ActionResult update(int id)
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult update(Employee e,string returnUrl)
+        {
+            if (EmployeeManager.update(e))
+            {
+                return Redirect(returnUrl ?? Url.Action("display", "Employee"));
+            }
+            else
+            {
+
+                return View();
+            }
+        }
+        public ActionResult delete(int id)
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult delete(int id, string returnUrl)
+        {
+            if (EmployeeManager.delete(id))
+            {
+                return Redirect(returnUrl ?? Url.Action("display", "Employee"));
+            }
+            else
+            {
+
+                return View();
+            }
+        }
+        public ActionResult display(Employee e)
+        {
+           
+            return View(EmployeeManager.display(e));
+        }
+    }
+}
